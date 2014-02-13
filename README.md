@@ -8,7 +8,7 @@ IMPORTANT!
 
 -When working on a project feature, make sure you use a feature branch of the latest CI branch:
 
-  $ git branch feature/<some_feature_name> ci
+  $ git branch feature/some_feature_name ci
   
 This will create a new branch of a unique name starting from the latest commit to CI.
  
