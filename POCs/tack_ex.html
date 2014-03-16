@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<title>Tacks</title>
+
+<html>
+	
+	<head>
+		<script src="js/jquery-1.10.2.js"></script>
+  		<script src="js/jquery-ui-1.10.4.custom.js"></script>
+		<script src="js/jquery-ui-1.10.4.custom.min.js"></script>
+		<script>
+			var offsetX = 10;
+			var offsetY = 10;
+			var id = 1;
+
+			function show_last_coords(){
+				var targ = $(event.target);
+				var x = targ.offset().left;
+				var y = targ.offset().top;
+				var h = targ.height();
+				var w = targ.width();
+				$('#results').innerHTML=("x: " + x + ", y:" + y + ", h: " + h + ", w:" + w);
+			};
+
+			function make_new_tack(){
+				// make the title div
+				var title = $( "<div/>", {
+						"class":"tack_title",
+						text: "Tack Title: " + id,
+						id: "ex_tack_title"
+					});
+
+				var frame = $( "<iframe />", {
+						"class":"tack_content",
+						src:"http://www.huffingtonpost.com/2014/03/16/sarolta-ban_n_4966608.html",//"http://www.youtube.com/embed/NM4Rph7eeP4",
+						id: "ex_tack_content"
+					});
+
+				var feedback = $( "<div/>", {
+				 		"class":"tack_feedback",
+				 		text: "WHOAH " + id,
+				 		id: "ex_tack_feedback"
+				 	});
+
+				var new_tack = $("<div/>", {
+						"class":"generic_tack",
+						id: id,
+						on:{mouseup:show_last_coords}
+					}).append(title).append(frame).append(feedback);
+
+				$('#tacks').prepend(new_tack);
+				show_last_coords(new_tack);
+				id+=1;
+
+				$(".generic_tack").draggable();
+				$(".generic_tack").resizable();
+  
+			};
+
+			$(document).ready(function(){
+
+			});
+
+			$ajax
+		</script>
+
+		<link rel="stylesheet" href="css/dark-hive/jquery-ui-1.10.4.custom.css">
+		<link rel="stylesheet" href="css/dark-hive/jquery-ui-1.10.4.custom.min.css">
+		<style type="text/css">
+			.generic_tack { 
+				position: absolute; 
+				float: right|bottom;
+				color: grey;
+				border: 4px solid darkblue;
+				padding: 6px;
+				overflow: hidden;
+			}
+			.tack_title {
+				text-align: center;
+			}
+			.tack_content {
+				text-align: center;
+				width: 100%;
+				height: 100%;
+				float: bottom|right;
+			}
+			.tack_feedback {
+				text-align: center;
+				float: bottom;
+			}
+		</style>
+
+	<body>
+		<button id='new_tack_button' onclick="make_new_tack()">New Tack</button>
+		<div id="results"></div>
+		<div id='tacks'></div>
+	</body>
+</html>
