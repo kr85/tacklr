@@ -104,38 +104,22 @@ CREATE TABLE tbl_follow (
 * Message Table
 */
 DROP TABLE IF EXISTS tbl_message;
-CREATE TABLE tbl_message (
-    messageID SMALLINT NOT NULL AUTO_INCREMENT,
-    senderID BIGINT,
-	receiverID BIGINT,
-    messageTitle VARCHAR(255),
-	messageContent TEXT,
-	updateDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	createDate TIMESTAMP,
-	PRIMARY KEY(messageID),
-	FOREIGN KEY (senderID)
-        REFERENCES tbl_user (userID)
-        ON DELETE SET NULL ON UPDATE CASCADE,
-	FOREIGN KEY (receiverID)
-        REFERENCES tbl_user (userID)
-        ON DELETE SET NULL ON UPDATE CASCADE
-);
 
 /*
 * Link table
 */
-DROP TABLE IF EXISTS tbl_link;
-CREATE TABLE tbl_link (
-    linkID BIGINT NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS tbl_tack;
+CREATE TABLE tbl_tack (
+    tackID BIGINT NOT NULL AUTO_INCREMENT,
 	userID BIGINT,
 	boardID SMALLINT,
 	isPrivate BOOLEAN DEFAULT 1,
-    linkName TEXT NOT NULL,
-	linkURL VARCHAR(255) NOT NULL,
+    tackName TEXT NOT NULL,
+	tackURL VARCHAR(255) NOT NULL,
 	imageURL VARCHAR (255),
-    linkDescription LONGTEXT NOT NULL,
+    tackDescription LONGTEXT NOT NULL,
 	updateDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	createDate TIMESTAMP,	PRIMARY KEY(linkID),
+	createDate TIMESTAMP,	PRIMARY KEY(tackID),
     FOREIGN KEY (userID)
         REFERENCES tbl_user (userID)
         ON DELETE SET NULL ON UPDATE CASCADE,
