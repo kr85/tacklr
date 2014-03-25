@@ -25,7 +25,6 @@
 		<?php echo $form->error($model,'boardTitle'); ?>
 	</div>
 
-	<div class="row">
 		<?php echo $form->labelEx($model,'categoryID'); ?>
         <?php
             // retrieve the models from db
@@ -34,7 +33,6 @@
             $list = CHtml::listData($models, 'categoryID', 'categoryName');
             echo $form->dropDownList($model, 'categoryID', $list, array('empty' => 'Choose a category')); ?>
 		<?php echo $form->error($model,'categoryID'); ?></br>
-	</div>
 
     <div class="row buttons">
         <a href="/mytacks/tacklr/category/create"><button type="button">Create New Category</button></a>
