@@ -8,7 +8,6 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'Create Board', 'url'=>array('create')),
-	array('label'=>'Manage Board', 'url'=>array('admin')),
 );
 ?>
 <?php
@@ -21,9 +20,8 @@ $cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
 $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
 ?>
 
-<h1>Boards</h1>
+<h1 xmlns="http://www.w3.org/1999/html">Boards</h1>
 <div id='boards'>
-    boards
 
 </div>
 
@@ -31,10 +29,26 @@ $cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
 $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
 $UID = ($user_in_db['userID']);
 //echo $UID;
-$boards = Board::model()->findAllByAttributes( array('userID'=>(int)$UID));
+$boards = Board::model()->findAllByAttributes(array('userID'=>(int)$UID));
+?>
 
+<div class="row">
+    <div class="span12">
+        <ul class="thumbnails">
+<?php
 foreach ($boards as $board)
 {
-    echo CHtml::button($board['boardTitle'], array('onclick' => 'js:document.location.href="board/view?&id='.$board['boardID'].'"'));
+    ?>
+        <li class="span4">
+            <a href="/mytacks/tacklr/board/view?&id=<?php echo $board['boardID']; ?>" class="thumbnail">
+                <div class="caption">
+                    <h3> <?php echo $board['boardTitle'] ?></h3>
+                </div>
+            </a>
+        </li>
+<?php
 }
-//echo 'make_new_tack(\'boards\',"'.$board['boardTitle'].'","'.$board['description'].'","'.$board['updateDate'].'");';
+?>
+        </ul>
+    </div>
+</div>

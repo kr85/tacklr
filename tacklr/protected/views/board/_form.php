@@ -26,33 +26,24 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'userID'); ?>
-		<?php echo $form->textField($model,'userID',array('size'=>20,'maxlength'=>20)); ?>
-		<?php echo $form->error($model,'userID'); ?>
+		<?php echo $form->labelEx($model,'categoryID'); ?>
+        <?php
+            // retrieve the models from db
+            $models = Category::model()->findAll(array('order' => 'categoryName'));
+            // format models as $key=>value with listData
+            $list = CHtml::listData($models, 'categoryID', 'categoryName');
+            echo $form->dropDownList($model, 'categoryID', $list, array('empty' => 'Choose a category')); ?>
+		<?php echo $form->error($model,'categoryID'); ?></br>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'categoryID'); ?>
-		<?php echo $form->textField($model,'categoryID'); ?>
-		<?php echo $form->error($model,'categoryID'); ?>
-	</div>
+    <div class="row buttons">
+        <a href="/mytacks/tacklr/category/create"><button type="button">Create New Category</button></a>
+    </div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'description'); ?>
 		<?php echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'description'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'updateDate'); ?>
-		<?php echo $form->textField($model,'updateDate'); ?>
-		<?php echo $form->error($model,'updateDate'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'createDate'); ?>
-		<?php echo $form->textField($model,'createDate'); ?>
-		<?php echo $form->error($model,'createDate'); ?>
 	</div>
 
 	<div class="row buttons">

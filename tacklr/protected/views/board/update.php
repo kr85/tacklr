@@ -10,9 +10,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'List Board', 'url'=>array('index')),
-	array('label'=>'Create Board', 'url'=>array('create')),
 	array('label'=>'View Board', 'url'=>array('view', 'id'=>$model->boardID)),
-	array('label'=>'Manage Board', 'url'=>array('admin')),
 );
 ?>
 

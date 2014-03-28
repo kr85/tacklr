@@ -23,9 +23,7 @@
  * The followings are the available model relations:
  * @property Board[] $boards
  * @property Follow[] $follows
- * @property Link[] $links
- * @property Message[] $messages
- * @property Message[] $messages1
+ * @property Tack[] $tacks
  * @property Group $group
  */
 class User extends CActiveRecord
@@ -48,7 +46,7 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, firstName, lastName, email, updateDate', 'required'),
+			array('username, password, firstName, lastName, email', 'required'),
 			array('groupID, active', 'numerical', 'integerOnly'=>true),
 			array('username, password, activeKey', 'length', 'max'=>125),
 			array('firstName, lastName, imageURL', 'length', 'max'=>255),
@@ -71,9 +69,7 @@ class User extends CActiveRecord
 		return array(
 			'boards' => array(self::HAS_MANY, 'Board', 'userID'),
 			'follows' => array(self::HAS_MANY, 'Follow', 'userID'),
-			'links' => array(self::HAS_MANY, 'Link', 'userID'),
-			'messages' => array(self::HAS_MANY, 'Message', 'senderID'),
-			'messages1' => array(self::HAS_MANY, 'Message', 'receiverID'),
+			'tacks' => array(self::HAS_MANY, 'Tack', 'userID'),
 			'group' => array(self::BELONGS_TO, 'Group', 'groupID'),
 		);
 	}

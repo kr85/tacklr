@@ -15,7 +15,7 @@ class BoardController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
+			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
 
@@ -35,8 +35,12 @@ class BoardController extends Controller
 				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+            array('allow', // allow authenticated user to perform 'delete' actions
+                'actions'=>array('delete'),
+                'users'=>array('@'),
+            ),
+			array('allow', // allow admin user to perform 'admin' actions
+				'actions'=>array('admin'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -63,6 +67,10 @@ class BoardController extends Controller
 	public function actionCreate()
 	{
 		$model=new Board;
+        $pst = new DateTimeZone('America/Los_Angeles');
+        $date = new DateTime();
+        $date->setTimezone($pst);
+        $timeStamp = $date->format('Y-m-d H:i:s');
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -70,6 +78,12 @@ class BoardController extends Controller
 		if(isset($_POST['Board']))
 		{
 			$model->attributes=$_POST['Board'];
+
+            $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
+            $UID = ($user_in_db['userID']);
+            $model->userID = $UID;
+            $model->createDate = $timeStamp;
+
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->boardID));
 		}
@@ -87,6 +101,10 @@ class BoardController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+        $pst = new DateTimeZone('America/Los_Angeles');
+        $date = new DateTime();
+        $date->setTimezone($pst);
+        $timeStamp = $date->format('Y-m-d H:i:s');
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -94,6 +112,7 @@ class BoardController extends Controller
 		if(isset($_POST['Board']))
 		{
 			$model->attributes=$_POST['Board'];
+            $model->updateDate = $timeStamp;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->boardID));
 		}
@@ -110,11 +129,11 @@ class BoardController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
-
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        $this->loadModel($id)->delete();
+        if (!isset($_GET['ajax']))
+        {
+            $this->redirect(array('index'));
+        }
 	}
 
 	/**

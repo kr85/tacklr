@@ -8,8 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Board', 'url'=>array('index')),
-	array('label'=>'Manage Board', 'url'=>array('admin')),
+	array( 'label'=>'List Boards', 'url'=>array('index')),
 );
 ?>
 

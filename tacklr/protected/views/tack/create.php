@@ -1,11 +1,17 @@
 <?php
 /* @var $this TackController */
+/* @var $model Tack */
 
 $this->breadcrumbs=array(
-	'Tack'=>array('/tack'),
+	'Tacks'=>array('index'),
 	'Create',
 );
-?>
-<h1><?php echo $this->id . '/' . $this->action->id; ?></h1>
 
-<?php $this->renderPartial('_form', array('model'=>Tack::model())); ?>
+$this->menu=array(
+    array('label'=>'View Boards', 'url'=>('/mytacks/tacklr/board/index'))
+);
+?>
+
+<h1>Create Tack</h1>
+
+<?php $this->renderPartial('_form', array('model'=>$model)); ?>

@@ -28,15 +28,26 @@
 	    'brandUrl'=> array('/site/index'),
 	    'collapse'=>true, // requires bootstrap-responsive.css
 	    'items'=> array(
-	        array(
-	            'class'=>'bootstrap.widgets.TbMenu',
-	            'htmlOptions'=>array('class'=>'pull-right'),
-	            'items'=>array(
-	                array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-                    array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
-					array('label'=>'Boards' , 'url'=>array('/board'), 'visible'=>!Yii::app()->user->isGuest)
-	            ),
-	        ),
+            array(
+                'class'=>'bootstrap.widgets.TbButton',
+                'label'=>'Login',
+                'htmlOptions'=>array('class'=>'pull-right'),
+                'url'=>array('/site/login'),
+                'visible'=>Yii::app()->user->isGuest
+            ),
+            array(
+                'class'=>'bootstrap.widgets.TbButton',
+                'label'=>'Logout ('.Yii::app()->user->name.')',
+                'htmlOptions'=>array('class'=>'pull-right'),
+                'url'=>array('/site/logout'),
+                'visible'=>!Yii::app()->user->isGuest
+            ),
+            array(
+                'class'=>'bootstrap.widgets.TbButton',
+                'type'=>'primary', 'label'=>'Boards',
+                'url'=>array('/board'),
+                'visible'=>!Yii::app()->user->isGuest
+            ),
 	    ),
 	)); ?>
 

@@ -81,11 +81,9 @@ class UserController extends Controller
 					//$this->redirect('/mytacks/tacklr/user/create');
             		return;
 			}
-       
 
 			$model->groupID = 2;
 			$model->active = 0;
-			$model->updateDate = $timeStamp;
 			$model->joinDate = $timeStamp;
 			$model->activeKey = crypt($model->username.$rnd);
 			$activationUrl = Yii::app()->getBaseUrl(true).'/user/activate?id='.$model->activeKey;
@@ -104,7 +102,7 @@ class UserController extends Controller
 			if($model->save())
 			{
 				$this->sendActivatioEmail($activationUrl, $model->email);
-				$this->redirect(array('view','id'=>$model->userID));
+				$this->redirect('/mytacks/tacklr/index.php');
 			}
 				
 		}
@@ -126,7 +124,7 @@ class UserController extends Controller
 		if($model === null)
 		{
 			
-			echo 'can not find username';
+			echo 'Can not find username.';
 			//$url = $this->createUrl('//registration/activation_failure.php');
 			//$this->redirect($url);
 		}
@@ -134,9 +132,9 @@ class UserController extends Controller
 		{
 			$model->active = 1;
 			if ($model->update())
-				echo 'Here you are'. $model->username;
+				echo 'Here you are '. $model->username;
 			else
-				echo 'fail to activate'. $model->username;
+				echo 'Fail to activate '. $model->username;
 			//$url = $this->createUrl('//registration/activation_failure.php');
 			//$this->redirect($url);
 		}
@@ -152,6 +150,10 @@ class UserController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+        $pst = new DateTimeZone('America/Los_Angeles');
+        $date = new DateTime();
+        $date->setTimezone($pst);
+        $timeStamp = $date->format('Y-m-d H:i:s');
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -159,6 +161,7 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
+            $model->updateDate = $timeStamp;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->userID));
 		}
