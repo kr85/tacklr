@@ -70,7 +70,7 @@ class Tack extends CActiveRecord
 			'tackID' => 'Tack',
 			'userID' => 'User',
 			'boardID' => 'Board',
-			'isPrivate' => 'Is Private',
+			'isPrivate' => 'Private',
 			'tackName' => 'Tack Name',
 			'tackURL' => 'Tack Url',
 			'imageURL' => 'Image Url',

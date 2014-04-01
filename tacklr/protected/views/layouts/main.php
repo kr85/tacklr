@@ -11,6 +11,27 @@
 	?>
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+    <!--<script src="http://threedubmedia.com/inc/js/jquery-1.7.2.js"></script>
+    <script src="http://threedubmedia.com/inc/js/jquery.event.drag-2.2.js"></script>
+    <script src="http://threedubmedia.com/inc/js/jquery.event.drag.live-2.2.js"></script>
+    <script type="text/javascript">
+        jQuery(function($){
+            $('.drag').drag(function( ev, dd ){
+                    $( this ).css({
+                        top: dd.offsetY,
+                        left: dd.offsetX
+                    });
+                });
+        });
+    </script>
+
+    <style type="text/css">
+        .drag {
+            position: absolute;
+            width: 4in;
+            cursor: cell;
+        }
+    </style>-->
 </head>
 
 <body>

@@ -64,7 +64,7 @@ class TackController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
+	public function actionCreate($boardID)
 	{
 		$model=new Tack;
         $pst = new DateTimeZone('America/Los_Angeles');
@@ -82,6 +82,7 @@ class TackController extends Controller
             $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
             $UID = ($user_in_db['userID']);
             $model->userID = $UID;
+            $model->boardID = $boardID;
             $model->createDate = $timeStamp;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->tackID));

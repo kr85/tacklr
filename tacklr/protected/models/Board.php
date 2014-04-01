@@ -20,7 +20,6 @@
  */
 class Board extends CActiveRecord
 {
-    public $BID;
 	/**
 	 * @return string the associated database table name
 	 */

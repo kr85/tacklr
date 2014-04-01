@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'View Tack', 'url'=>array('view', 'id'=>$model->tackID)),
-    array('label'=>'List Boards', 'url'=>('/mytacks/tacklr/board/index'))
+    array('label'=>'List Boards', 'url'=>array('board/index'))
 );
 ?>
 

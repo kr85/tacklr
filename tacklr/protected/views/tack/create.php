@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-    array('label'=>'View Boards', 'url'=>('/mytacks/tacklr/board/index'))
+    array('label'=>'View Boards', 'url'=>array('board/index'))
 );
 ?>
 

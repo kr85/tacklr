@@ -189,4 +189,6 @@ class BoardController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
 }

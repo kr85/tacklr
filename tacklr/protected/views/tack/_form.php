@@ -20,15 +20,6 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'boardID'); ?>
-        <?php
-            $models = Board::model()->findAll(array('order' => 'boardTitle'));
-            $list = CHtml::listData($models, 'boardID', 'boardTitle');
-            echo $form->dropDownList($model, 'boardID', $list, array('empty' => 'Choose a board')); ?>
-		<?php echo $form->error($model,'boardID'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'tackName'); ?>
 		<?php echo $form->textArea($model,'tackName',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'tackName'); ?>
