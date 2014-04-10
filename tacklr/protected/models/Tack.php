@@ -21,6 +21,28 @@
  */
 class Tack extends CActiveRecord
 {
+    public function __construct($type, $board=null, $user=null)
+    {
+        $this->tackType = $type;
+
+        if($board != null)
+        {
+            $this->boardID = $board;
+        }
+        else if(isset($_POST['boardID']))
+        {
+            $this->boardID = $board;
+        }
+
+        if($user != null)
+        {
+            $this->userID = $user;
+        }
+        else if(isset($_POST['userID']))
+        {
+            $this->userID = $user;
+        }
+    }
 	/**
 	 * @return string the associated database table name
 	 */
@@ -37,14 +59,15 @@ class Tack extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tackName, tackURL, tackDescription', 'required'),
+			array('tackName, tackContent, tackDescription, updateDate', 'required'),
 			array('boardID, isPrivate', 'numerical', 'integerOnly'=>true),
 			array('userID', 'length', 'max'=>20),
-			array('tackURL, imageURL', 'length', 'max'=>255),
+            array('tackContent', 'length', 'max'=>255),
+            array('tackType', 'length', 'max'=>255),
 			array('createDate', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('tackID, userID, boardID, isPrivate, tackName, tackURL, imageURL, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
+			array('tackID, userID, boardID, isPrivate, tackName, tackContent, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,8 +95,9 @@ class Tack extends CActiveRecord
 			'boardID' => 'Board',
 			'isPrivate' => 'Private',
 			'tackName' => 'Tack Name',
-			'tackURL' => 'Tack Url',
-			'imageURL' => 'Image Url',
+            'tackContent' => 'Tack Content',
+            'tackType' => 'Tack Type',
+			'tackImage' => 'Tack Image',
 			'tackDescription' => 'Tack Description',
 			'updateDate' => 'Update Date',
 			'createDate' => 'Create Date',
@@ -103,8 +127,9 @@ class Tack extends CActiveRecord
 		$criteria->compare('boardID',$this->boardID);
 		$criteria->compare('isPrivate',$this->isPrivate);
 		$criteria->compare('tackName',$this->tackName,true);
-		$criteria->compare('tackURL',$this->tackURL,true);
-		$criteria->compare('imageURL',$this->imageURL,true);
+        $criteria->compare('tackContent',$this->tackContent,true);
+        $criteria->compare('tackType',$this->tackType,true);
+		$criteria->compare('tackImage',$this->tackImage,true);
 		$criteria->compare('tackDescription',$this->tackDescription,true);
 		$criteria->compare('updateDate',$this->updateDate,true);
 		$criteria->compare('createDate',$this->createDate,true);
@@ -113,6 +138,58 @@ class Tack extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function get_type()
+    {
+        return $this->tackType;
+    }
+    public function to_html()
+    {
+        $pre = "<div class='user_tack' id='".$this->tackID."' style=' position:relative;'>\n";
+        $pre .= "\t<div class='tack_title' id='".$this->tackName."'>\n";
+        $pre .= $this->tackName."\n</div>\n";
+        /// @todo add tack type! maybe make it widget type...
+        $pre .= "\t\t<div class='tack_content'>\n";
+        $html = "";
+        $post = "</div>\n<div class='tack_feedback'>\n";
+        $post .= "this tack's feedback</div>";
+        $post  .= "</div>";
+        return array('pre_content'=>$pre, 'content'=>$html, 'post_content'=>$post);
+    }
+
+    public function get_widget()
+    {
+        return array('widget_type'=>$this->tackType, 'widget_params'=>array('v'=>$this->tackContent));
+    }
+
+    public static function get_css()
+    {
+        $css = "<style type='text/css'>\n";
+        $css .= ".user_tack {\n";
+        $css .= "position: absolute;\n";
+        $css .= "float: right|bottom;\n";
+        $css .= "color: grey;\n";
+        $css .= "border: 4px solid darkblue;\n";
+        $css .= "padding: 6px;\n";
+        $css .= "overflow: hidden;\n";
+        $css .= "}\n";
+        $css .= ".tack_title {\n";
+        $css .= "text-align: center;\n";
+        $css .= "}\n";
+        $css .= ".tack_content {\n";
+        $css .= "text-align: center;\n";
+        $css .= "width: 100%;\n";
+        $css .= "height: 100%;\n";
+        $css .= "float: bottom|right;\n";
+        $css .= "}\n";
+        $css .= ".tack_feedback {\n";
+        $css .= "text-align: center;\n";
+        $css .= "float: bottom;\n";
+        $css .= "}\n";
+        $css .= "</style>\n";
+
+        return $css;
+    }
 
 	/**
 	 * Returns the static model of the specified AR class.

@@ -10,10 +10,23 @@ $this->menu=array(
 	array('label'=>'Create Board', 'url'=>array('create')),
 );
 ?>
+<?php
+Yii::app()->clientScript->registerCoreScript('jquery');
+$baseUrl = Yii::app()->baseUrl;
+$cs = Yii::app()->getClientScript();
+$cs->registerScriptFile($baseUrl.'/js/jquery-1.10.2.js');
+$cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.js');
+$cs->registerScriptFile($baseUrl.'/js/jquery-ui-1.10.4.custom.min.js');
+$cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
+
+
+//Yii::import('extensions/Yiitube');
+?>
 
 <h1 xmlns="http://www.w3.org/1999/html">Boards</h1>
 
 <?php
+// Get the boards from the user in the DB...
 $user_in_db = User::model()->findByAttributes(array('username'=>Yii::app()->user->getId()));
 $UID = ($user_in_db['userID']);
 $boards = Board::model()->findAllByAttributes(array('userID'=>(int)$UID));

@@ -2,17 +2,25 @@
 /* @var $this TackController */
 /* @var $model Tack */
 /* @var $form CActiveForm */
+
+// Include the client scripts
+$baseUrl = Yii::app()->baseUrl;
+Yii::app()->clientScript->registerCoreScript('jquery');
+
+$cs = Yii::app()->getClientScript();
+$cs->registerScriptFile($baseUrl.'/js/tack_generator.js');
 ?>
 
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tack-form',
+    'action'=>'/mytacks/tacklr/tack/create',
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -21,7 +29,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tackName'); ?>
-		<?php echo $form->textArea($model,'tackName',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->textField($model,'tackName',array('size'=>60, 'maxLength'=>50)); ?>
 		<?php echo $form->error($model,'tackName'); ?>
 	</div>
 
@@ -39,7 +47,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tackDescription'); ?>
-		<?php echo $form->textArea($model,'tackDescription',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->textArea($model,'tackDescription',array('rows'=>3, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'tackDescription'); ?>
 	</div>
 
@@ -55,4 +63,3 @@
 
 <?php $this->endWidget(); ?>
 
-</div><!-- form -->
