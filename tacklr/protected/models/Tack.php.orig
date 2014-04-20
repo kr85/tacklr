@@ -59,15 +59,19 @@ class Tack extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tackName, tackURL, tackDescription, updateDate', 'required'),
+			array('tackName, tackURL, tackDescription', 'required'),
 			array('boardID, isPrivate', 'numerical', 'integerOnly'=>true),
 			array('userID', 'length', 'max'=>20),
-            array('tackURL', 'length', 'max'=>255),
+<<<<<<< HEAD
+			array('tackURL, imageURL', 'length', 'max'=>255),
+=======
+            array('tackContent', 'length', 'max'=>255),
             array('tackType', 'length', 'max'=>255),
+>>>>>>> Intermediate checkin: basic tack functionality in-place.
 			array('createDate', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
+			array('tackID, userID, boardID, isPrivate, tackName, tackURL, imageURL, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,9 +99,14 @@ class Tack extends CActiveRecord
 			'boardID' => 'Board',
 			'isPrivate' => 'Private',
 			'tackName' => 'Tack Name',
-            'tackURL' => 'Tack URL',
+<<<<<<< HEAD
+			'tackURL' => 'Tack Url',
+			'imageURL' => 'Image Url',
+=======
+            'tackContent' => 'Tack Content',
             'tackType' => 'Tack Type',
 			'tackImage' => 'Tack Image',
+>>>>>>> Intermediate checkin: basic tack functionality in-place.
 			'tackDescription' => 'Tack Description',
 			'updateDate' => 'Update Date',
 			'createDate' => 'Create Date',
@@ -127,9 +136,14 @@ class Tack extends CActiveRecord
 		$criteria->compare('boardID',$this->boardID);
 		$criteria->compare('isPrivate',$this->isPrivate);
 		$criteria->compare('tackName',$this->tackName,true);
-        $criteria->compare('tackURL',$this->tackURL,true);
+<<<<<<< HEAD
+		$criteria->compare('tackURL',$this->tackURL,true);
+		$criteria->compare('imageURL',$this->imageURL,true);
+=======
+        $criteria->compare('tackContent',$this->tackContent,true);
         $criteria->compare('tackType',$this->tackType,true);
 		$criteria->compare('tackImage',$this->tackImage,true);
+>>>>>>> Intermediate checkin: basic tack functionality in-place.
 		$criteria->compare('tackDescription',$this->tackDescription,true);
 		$criteria->compare('updateDate',$this->updateDate,true);
 		$criteria->compare('createDate',$this->createDate,true);
@@ -159,7 +173,7 @@ class Tack extends CActiveRecord
 
     public function get_widget()
     {
-        return array('widget_type'=>$this->tackType, 'widget_params'=>array('v'=>$this->tackURL));
+        return array('widget_type'=>$this->tackType, 'widget_params'=>array('v'=>$this->tackContent));
     }
 
     public static function get_css()

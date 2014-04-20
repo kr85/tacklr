@@ -28,6 +28,7 @@ $this->menu=array(
 );
 ?>
 
+<<<<<<< HEAD
 <h1>Board: <?php echo $model->boardTitle; ?></h1>
 
 <?php
@@ -56,6 +57,42 @@ $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
         </ul>
     </div>
 </div>
+=======
+<?php
+$board_in_db = Board::model()->findByAttributes(array('boardID'=>$model->boardID));
+$BID = ($board_in_db['boardID']);
+
+$tack_list = "";
+$tack_list = Tack::model()->findAllByAttributes( array('boardID'=>(int)$BID));
+?>
+<h1>View Board #<?php echo $model->boardID; ?></h1>
+
+<?php $this->widget('zii.widgets.CDetailView', array(
+	'data'=>$model,
+	'attributes'=>array(
+		'boardID',
+		'boardTitle',
+		'userID',
+		'categoryID',
+		'description',
+		'updateDate',
+		'createDate',
+	),
+)); ?>
+<div id="tacks">
+    <p>tacks:</p>
+    <?php
+        foreach ($tack_list as $tack)
+        {
+            $tack_html = $tack->to_html();
+            $tack_widget = $tack->get_widget();
+            echo $tack_html['pre_content'];
+            $this->widget($tack_widget['widget_type'], $tack_widget['widget_params']);
+            //echo $tack_html['content'];
+            echo $tack_html['post_content'];
+        }
+    ?>
+</div>
 
 <script type="text/javascript">
     $( document).ready(function() {
@@ -77,7 +114,7 @@ $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
     </div>
 
     <div class="modal-body" align="center">
-        <?php $this->renderPartial('../Tack/_form', array('model'=>new Tack(null))); ?>
+        <?php $this->renderPartial('../Tack/_form', array('model'=>new Tack)); ?>
     </div>
     <!--
     <div class="modal-footer">
@@ -107,3 +144,4 @@ $tacks = Tack::model()->findAllByAttributes(array('boardID'=>(int)$BID));
     )
 );
 ?>
+>>>>>>> Intermediate checkin: basic tack functionality in-place.
