@@ -45,7 +45,6 @@ div.form {
             $list = CHtml::listData($models, 'categoryID', 'categoryName');
             echo $form->dropDownList($model, 'categoryID', $list, array('empty' => 'Choose a category')); ?>
 		<?php echo $form->error($model,'categoryID'); ?></br>
-
     <div class="row buttons">
         <a href="/mytacks/tacklr/category/create"><button type="button">Create New Category</button></a>
     </div>

@@ -28,15 +28,15 @@ class UserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index', 'view', 'create', 'activate' actions
-				'actions'=>array('index','view','create','activate','recovery','changepassword'),
+				'actions'=>array('view','create','activate','recovery','changepassword'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('update'),
+				'actions'=>array('updateprofile','update'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('admin','delete','index','update'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -56,25 +56,7 @@ class UserController extends Controller
 		));
 	}
 	
-	/**
-	 * Forget password view
-	 */
-	public function actionForget()
-	{
-		$model=new ForgetPassword;
-		
-		if(isset($_POST['ForgetPassword']))
-		{
-			echo "<br\> <br\><br\><br\><br\><br\>Email has been sent!!!";
-		}
-		
-		$this->render('forget',array(
-				'model'=>$model,
-		));
-		
-	}
-	
-	
+
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -86,53 +68,30 @@ class UserController extends Controller
 		$date = new DateTime();
 		$date->setTimezone($pst);
 		$timeStamp = $date->format('Y-m-d H:i:s');
-		$rnd = rand(0,9999);  // generate random number between 0-9999
+		$rnd = rand(0,9999); // generate random number between 0-9999  
 		
-
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			// check the availability of username and email 
-			if(User::model()->exists('username=:username',array('username'=>$model->username)))
+			if ($model->validateUser($model->username, $model->email))
 			{
-					echo 'User already exists';
-					$model->addError('username', 'Username already exists!');
-					//$this->redirect('/mytacks/tacklr/user/create');
-					return;
-			}
-			if (User::model()->findByAttributes(array('email'=>$model->email)))
-			{
-				echo 'Email already exists';
-				$model->addError('email', 'Email already exists!');
-				return;
-			}
+				$model->groupID = 2;
+				$model->active = 0;
+				$model->updateDate = $timeStamp;
+				$model->joinDate = $timeStamp;
+				$model->activeKey = str_replace('.','p',crypt($model->username.$rnd)); //generate activation key
+				$activationUrl = Yii::app()->getBaseUrl(true).'/user/activate?id='.$model->activeKey; //create activation URL
+				$model->password =crypt($model->password,$model->activeKey);//enctypt password +  key prior to store into database
+				if($model->save())
+				{
+					$title = "Tacklr Account Activation";
+					$subject = "Welcome to Tacklr";
+					$action = "activate your account";
+					$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email); //send activation email to user
+					$this->redirect(Yii::app()->homeUrl);
+				}
 					
-			$model->groupID = 2;
-			$model->active = 0;
-			$model->joinDate = $timeStamp;
-			$model->activeKey = str_replace('.','p',crypt($model->username.$rnd));
-			$activationUrl = Yii::app()->getBaseUrl(true).'/user/activate?id='.$model->activeKey;
-			$uploadedFile=CUploadedFile::getInstance($model,'imageURL'); // get the file name to be uploaded
-			
-            if($uploadedFile)
-            {
-                $fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
-                $uploadedFile->saveAs(Yii::app()->basePath.'/../images/'.$fileName);
-                // store baseURL and image name .....http://localhost:8080/tckle/images/226-php24.jpg
-                $model->imageURL = Yii::app()->getBaseUrl(true).'/images/'.$fileName;
-            }
-
-			//$fullImgSource = Yii::getPathOfAlias('webroot').'/media/images/'.$fullImgName;    
-			$model->password =crypt($model->password,$model->activeKey);
-			if($model->save())
-			{
-				$title = "Tacklr Account Activation";
-				$subject = "Welcome to Tacklr";
-				$action = "activate your account";
-				$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email);
-				$this->redirect(Yii::app()->homeUrl);
 			}
-				
 		}
 
 		$this->render('create',array(
@@ -147,7 +106,7 @@ class UserController extends Controller
 	 */
 	public function actionActivate($id)
 	{
-		
+		//Check activation key against user identity database
 		$model= User::model()->findByAttributes(array('activeKey'=>$id));
 		if($model === null)
 		{
@@ -157,13 +116,30 @@ class UserController extends Controller
 		{
 			$model->active = 1;
 			if ($model->update())
-			{
 				$this->redirect(Yii::app()->createUrl('site/login'));
-			}
 		}
-		//	
 	}
 	
+	/**
+	 * Updates user profile
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionUpdateProfile($id)
+	{
+		$model= User::model()->findByAttributes(array('username'=>$id));
+		if(isset($_POST['User']))
+		{
+			$model->attributes=$_POST['User'];
+			$model->password =crypt($model->password,$model->activeKey);
+			if($model->save())
+				$this->redirect(Yii::app()->homeUrl);
+		}
+
+		$this->render('update',array(
+			'model'=>$model,
+		));
+	}
 	
 	/**
 	 * Updates a particular model.
@@ -173,49 +149,41 @@ class UserController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-        $pst = new DateTimeZone('America/Los_Angeles');
-        $date = new DateTime();
-        $date->setTimezone($pst);
-        $timeStamp = $date->format('Y-m-d H:i:s');
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
+			$model->password =crypt($model->password,$model->activeKey);
             $model->updateDate = $timeStamp;
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->userID));
+					$this->redirect($this->createUrl('//user/admin'));
 		}
-
+	
 		$this->render('update',array(
-			'model'=>$model,
+				'model'=>$model,
 		));
 	}
 	
 	/** 
-	 * Display the recovery password form to create a change password activation link
-	 * 
+	 * Display the recovery password form
 	 */
 	public function actionRecovery()
 	{
 		$rnd = rand(0,9999);  // generate random number between 0-9999
-		$model = new RecoveryForm;
+		$model = new RecoveryForm; 
 		
 		if (isset($_POST['RecoveryForm']))
 		{
 			$model->attributes = $_POST['RecoveryForm'];
 			if ($model->validate())
 			{
-				$activationkey = str_replace('.','p',crypt($model->email.$rnd));
-				$activationUrl = Yii::app()->getBaseUrl(true).'/user/changepassword?id='.$activationkey;
+				$activationkey = str_replace('.','p',crypt($model->email.$rnd));//replace '.' with 'p' in the activation key link
+				$activationUrl = Yii::app()->getBaseUrl(true).'/user/changepassword?id='.$activationkey;// generate new activation link
 				if ($model->checkExists($activationkey))
 				{
 					$title = "Tacklr Password Recovery";
 					$subject = "Tacklr Password Recover";
 					$action = "recover your password";
-					$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email);
+					$this->sendActivatioEmail($title,$subject,$action, $activationUrl,$model->email);//generate password recovery email
 					$this->redirect(Yii::app()->homeUrl);
 				}
 			}
@@ -223,8 +191,10 @@ class UserController extends Controller
 		$this->render('recovery', array('model'=>$model));
 		
 	}
+	
 	/**
-	 * 
+	 * Display change password form
+	 * @param string $id is an activation key which is used to verify the user's account 
 	 */
 	public function actionChangePassword($id)
 	{
@@ -244,14 +214,13 @@ class UserController extends Controller
 				{
 					$user->password = crypt($model->password,$model->activationKey);
 					if ($user->update())
-					{
 						 $this->redirect(Yii::app()->createUrl('site/login'));
-					}
 				}
 			}
 		}
 		$this->render('changepassword',array('model'=>$model));
 	}
+	
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -321,9 +290,12 @@ class UserController extends Controller
 	}
 	
 	/**
-	 * Send activation email to user
-	 * @param activateURL is link used to activate user account
-	 * @param sendTo is the email of user
+	 * Send email to user
+	 * @param string $title the title of the email
+	 * @param string $subject the subject of the email
+	 * @param string $action the action of the email
+	 * @param string $activateURL the link used to activate user account
+	 * @param string $sendTo the email of user
 	 */
 	public function sendActivatioEmail( $title, $subject, $action, $activateUrl, $sendTo)
 	{
@@ -335,7 +307,7 @@ class UserController extends Controller
 				<title>$title</title>
 			</head>
 			<body>
-				<div style='width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 14px;'>
+				<div style='width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 16px;'>
 						<h1>$title</h1>
 						<div align='center'>
 						</div>
@@ -353,9 +325,5 @@ class UserController extends Controller
 			echo $email->getError();exit(0);
 			Yii::app()->user->setFlash('error','Error while sending email: '.$email->getError());
 		}
-		
-		
-		
-		
 	}
 }

@@ -82,13 +82,15 @@ class SiteController extends Controller
 		if(isset($_POST['LoginForm']))
 		{
 			$model->attributes=$_POST['LoginForm'];
-			// validate user input and redirect to the previous page if valid
+			// validate user input and redirect to user's home page if valid
 			if($model->validate() && $model->login())
-				//$this->redirect(Yii::app()->user->returnUrl);
-				{
-					$url = $this->createUrl('//site');
-					$this->redirect($url);
-				}
+			{
+				$user = User::model()->findByAttributes(array('username'=>$model->username));
+				if ($user->groupID == 2)
+					$this->redirect($this->createUrl('//site'));
+				else
+					$this->redirect($this->createUrl('//user/admin'));
+			}
 		}
 		// display the login form
 		$this->render('login',array('model'=>$model));

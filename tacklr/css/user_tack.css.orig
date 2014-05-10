@@ -1,0 +1,71 @@
+
+.user_tack {
+<<<<<<< HEAD
+    color: grey;
+    border: 4px solid darkblue;
+    padding: 6px;
+    position: relative;
+    display: table-cell;
+=======
+    position: absolute;
+    color: grey;
+    border: 4px solid darkblue;
+    padding: 6px;
+    overflow: hidden;
+>>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
+}
+.tack_title {
+    text-align: center;
+}
+<<<<<<< HEAD
+
+.tack_content {
+    text-align: center;
+    width: 100%;
+    overflow: auto;
+}
+
+.tack_description {
+    text-align: center;
+    width: 100%;
+}
+
+.tack_feedback {
+	max-height: 150px;
+	height: auto;
+	width: 100%;
+	padding: 5px;
+    text-align: center;
+	overflow: auto;
+}
+
+.feedback {
+	text-align: left;
+	width: 80%;
+}
+
+.feedback_meta {
+	font-size: 80%;
+}
+
+.feedback_entry {
+	width: 75%;
+	rows: 2;
+	border: 3px solid #cccccc;
+	font-family: Tahoma, sans-serif;
+	overflow: auto;
+}
+
+.feedback_button {
+	float:right;
+	float:middle;
+=======
+.tack_content {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+.tack_feedback {
+    text-align: center;
+>>>>>>> 65a4c8b6969dd622adcbcfc5f37e4bcba414d701
+}
