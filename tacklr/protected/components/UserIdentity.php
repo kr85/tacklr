@@ -23,8 +23,11 @@ class UserIdentity extends CUserIdentity
 		elseif($record->password!==crypt($this->password,$record->activeKey))
 		//elseif($record->password!==$this->password)
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
-		else
+		elseif($record->active== 0)
+		//elseif($record->password!==$this->password)
+			$this->errorCode= 3;
+		else 
 			$this->errorCode=self::ERROR_NONE;
-		return !$this->errorCode;
+		return $this->errorCode;
 	}
 }

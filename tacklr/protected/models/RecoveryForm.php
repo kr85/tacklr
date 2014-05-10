@@ -20,26 +20,29 @@ class RecoveryForm extends CFormModel
 			);
 	}
 	
-	/*
+	/**
 	 * Declares attribute labels
 	 */
 	public function attributeLabels()
 	{
 		return array('email'=>'Email');
 	}
-	/**
-	 * check whether the user name or email exist in the database
-	 */
 	
+	/**
+	 * Check if the email exist in the database
+	 * @param string $activationkey the activation key retrieved from activation link
+	 * @return bool if the email is valid
+	 */
 	public function checkExists($activationkey)
 	{
 		if (!$this->hasErrors())
 		{
 			if (!strpos($this->email,'@'))
-				$this->addError('email', 'Email is incorrect');
+				$this->addError('email', 'Email is incorrect!');
 			else
 			{
-				$user = User::model()->findByAttributes(array('email'=>$this->email));
+				//verify user's email against user data storage
+				$user = User::model()->findByAttributes(array('email'=>$this->email)); 
 				if ($user === null)
 				{
 					$this->addError('email', 'Can not find your email!');

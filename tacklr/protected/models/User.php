@@ -151,4 +151,21 @@ class User extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	
+	/**
+	 * Check username and email
+	 * @param string $username active username
+	 * 		  string $email user's email
+	 * @return true if the username and email does not exist in the system.
+	 * */
+	public function validateUser($username, $email)
+	{
+		if(User::model()->exists('username=:username',array('username'=>$username)))
+			$this->addError('username', 'Username already exists!');
+		if (User::model()->findByAttributes(array('email'=>$email)))
+			$this->addError('email', 'Email already exists!');
+		if ($this->hasErrors('email')|$this->hasErrors('username'))
+		 	return false;
+		return  true;
+	}
 }

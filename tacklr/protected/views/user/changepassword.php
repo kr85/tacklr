@@ -3,7 +3,7 @@
 /* @var $model ChangePasswordForm */
 /* @var $form CActiveForm */
 ?>
-
+</br>
 <div class="form">
 <fieldset>
 		<legend>Password Recovery</legend>
