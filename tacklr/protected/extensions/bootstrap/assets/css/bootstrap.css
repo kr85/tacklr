@@ -5522,6 +5522,7 @@ input[type="submit"].btn.btn-mini {
   margin-left: -20px;
   list-style: none;
   *zoom: 1;
+  width: 100%;    
 }
 
 .thumbnails:before,

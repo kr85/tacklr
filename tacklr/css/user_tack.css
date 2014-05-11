@@ -31,6 +31,7 @@
 }
 
 .feedback {
+	float:left;
 	text-align: left;
 	width: 80%;
 }
@@ -45,9 +46,14 @@
 	border: 3px solid #cccccc;
 	font-family: Tahoma, sans-serif;
 	overflow: auto;
+	float:left;
 }
 
 .feedback_button {
 	float:right;
-	float:middle;
+}
+
+
+.tacks_container {
+	align:center;
 }

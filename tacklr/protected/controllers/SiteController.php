@@ -86,7 +86,7 @@ class SiteController extends Controller
 			if($model->validate() && $model->login())
 			{
 				$user = User::model()->findByAttributes(array('username'=>$model->username));
-				if ($user->groupID == 2)
+				if ($user->groupID == 1)
 					$this->redirect($this->createUrl('//site'));
 				else
 					$this->redirect($this->createUrl('//user/admin'));

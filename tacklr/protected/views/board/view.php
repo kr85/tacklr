@@ -70,9 +70,8 @@ $this->menu=array(
     }
 ?>
 
-<div class="row">
-    <div class="span12">
-        <ul class="thumbnails">
+<div style="width:90% margin-left:10px align:center" >
+        <ul class="thumbnails" style="width:90% margin-left:10px">
             <?php foreach ($tacks as $tack): ?>
                 <!--<li class="span4">    -->
                             <?php
@@ -93,7 +92,6 @@ $this->menu=array(
                 <!--</li>-->
             <?php endforeach ?>
         </ul>
-    </div>
 </div>
 
 

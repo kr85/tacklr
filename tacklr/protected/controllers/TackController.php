@@ -4,7 +4,7 @@ class TackController extends Controller
 {
 	public function actionCreate()
 	{
-        $model=new Tack;
+        $model=new Tack(null);
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
