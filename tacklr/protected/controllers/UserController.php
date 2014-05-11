@@ -128,14 +128,25 @@ class UserController extends Controller
 	public function actionProfile($id)
 	{
 		$model= User::model()->findByAttributes(array('username'=>$id));
+		$oldPassWord = $model->password;
+		$model=$this->loadModel($id);
+		$pst = new DateTimeZone('America/Los_Angeles');
+		$date = new DateTime();
+		$date->setTimezone($pst);
+		$timeStamp = $date->format('Y-m-d H:i:s');
+		$oldPassWord = $model->password;
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			$model->password =crypt($model->password,$model->activeKey);
+			$model->updateDate = $timeStamp;
+			if ($model->password=='')
+				$model->password = $oldPassWord;
+			else 
+				$model->password =crypt($model->password,$model->activeKey);
 			if($model->save())
 				$this->redirect(Yii::app()->homeUrl);
 		}
-
+		$model->password = '';
 		$this->render('update',array(
 			'model'=>$model,
 		));
@@ -149,11 +160,19 @@ class UserController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+		$pst = new DateTimeZone('America/Los_Angeles');
+		$date = new DateTime();
+		$date->setTimezone($pst);
+		$timeStamp = $date->format('Y-m-d H:i:s');
+		$oldPassWord = $model->password;
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			$model->password =crypt($model->password,$model->activeKey);
-            $model->updateDate = $timeStamp;
+			$model->updateDate = $timeStamp;
+			if ($model->password=='')
+				$model->password = $oldPassWord;
+			else 
+				$model->password =crypt($model->password,$model->activeKey);
 			if($model->save())
 					$this->redirect($this->createUrl('//user/admin'));
 		}
