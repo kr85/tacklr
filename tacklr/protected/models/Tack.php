@@ -309,9 +309,7 @@ class Tack extends CActiveRecord
 		$criteria->compare('tackImage',$this->tackImage,true);
 		$criteria->compare('tackDescription',$this->tackDescription,true);
 		$criteria->compare('updateDate',$this->updateDate,true);
-        $criteria->compare('createDate',$this->createDate,true);
-        $criteria->compare('top',$this->top,true);
-        $criteria->compare('left',$this->left,true);
+		$criteria->compare('createDate',$this->createDate,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
