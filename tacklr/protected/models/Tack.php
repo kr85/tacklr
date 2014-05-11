@@ -423,13 +423,9 @@ class Tack extends CActiveRecord
         {
             return array('widget_type'=>$this->tackType, 'widget_properties'=>array('v'=>$this->tackURL, 'size'=>'small'));
         }
-        else if($this->tackType == 'slideshare')
-        {
-            return "<iframe src='".$this->tackURL."' scrolling='no' allowfullscreen> </iframe> <div style='margin-bottom:5px'> ";
-        }
         else if($this->tackType == 'sc-widget')
         {
-            return $this->tackURL;
+            return '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url='.$this->tackURL.'" width="100%" scrolling="no" frameborder="no"></iframe>';
 
         }
         else if ($this->tackType == 'image')
