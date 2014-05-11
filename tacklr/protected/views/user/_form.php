@@ -23,11 +23,10 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($model); ?>
-
-		<?php echo $form->textFieldRow($model, 'username', array('readonly'=>false)); ?>
-		<?php echo $form->passwordFieldRow($model, 'password', array(value=>'')); ?>
-		<?php echo $form->passwordFieldRow($model, 'password_repeat');?>
-		<?php echo $form->textFieldRow($model,'email'); ?>
+	<?php echo $form->textFieldRow($model, 'username'); ?>
+	<?php echo $form->passwordFieldRow($model, 'password'); ?>
+	<?php echo $form->passwordFieldRow($model, 'password_repeat');?>
+	<?php echo $form->textFieldRow($model,'email'); ?>
 
 		
 	<div class="form-actions">

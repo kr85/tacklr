@@ -1,32 +1,43 @@
 <?php /* @var $this Controller */ ?>
-<?php $this->beginContent('//layouts/boardmain'); ?>
-<div class="span-12">
-	<div class="sidebar">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="language" content="en" />
+
 	<?php
-		$this->beginWidget('bootstrap.widgets.TbNavbar', array(
-            'type'=>null,
-            'collapse'=>true,
-            'items'=>array(
-                array(
-                    'class'=>'bootstrap.widgets.TbMenu',
-                    'htmlOptions'=>array('class'=>'pull-left'),
-                    'items'=>$this->menu,
-                ),
-                array(
-                    'class'=>'bootstrap.widgets.TbButton',
-                    'htmlOptions'=>array('class'=>'pull-right'),
-                    'label'=>'Logout ('.Yii::app()->user->name.')',
-                    'url'=>array('/site/logout'),
-                    'visible'=>!Yii::app()->user->isGuest)
-            ),
-		));
-		$this->endWidget();
+		$baseUrl = Yii::app()->baseUrl;
+		$cs = Yii::app()->getClientScript();
+		$cs->registerCssFile($baseUrl.'/css/board.css');
+		echo Yii::app()->bootstrap->registerAllCss();
+		echo Yii::app()->bootstrap->registerCoreScripts();
 	?>
-	</div><!-- sidebar -->
-</div>
-<div class="tacks_container" style="margin:30px">
-    <div class="content">
-        <?php echo $content; ?>
-    </div><!-- content -->
-</div>
-<?php $this->endContent(); ?>
+
+	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+
+</head>
+
+<body>
+
+<div class="tacks_container" id="page" style="width:100%">
+
+	<div id="header">
+		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
+	</div><!-- header -->
+
+	
+
+	<?php if(isset($this->breadcrumbs)):?>
+		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
+			'links'=>$this->breadcrumbs,
+		)); ?><!-- breadcrumbs -->
+	<?php endif?>
+
+	<?php echo $content; ?>
+
+	<div class="clear"></div>
+
+</div><!-- page -->
+
+</body>
+</html>

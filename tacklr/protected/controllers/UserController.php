@@ -129,7 +129,6 @@ class UserController extends Controller
 	{
 		$model= User::model()->findByAttributes(array('username'=>$id));
 		$oldPassWord = $model->password;
-		$model=$this->loadModel($id);
 		$pst = new DateTimeZone('America/Los_Angeles');
 		$date = new DateTime();
 		$date->setTimezone($pst);
@@ -176,7 +175,7 @@ class UserController extends Controller
 			if($model->save())
 					$this->redirect($this->createUrl('//user/admin'));
 		}
-	
+		$model->password = '';
 		$this->render('update',array(
 				'model'=>$model,
 		));

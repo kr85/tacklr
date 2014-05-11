@@ -10,13 +10,13 @@ $this->breadcrumbs=array(
 ?>
 
 
-
+</br>
 <fieldset>
 		<legend>Login</legend>
 		<p>Please fill out the following form with your login credentials:</p>
 		<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 			'id'=>'horizontalForm',
-			'type'=>'verticle',
+			'type'=>'vertical',
 			'enableClientValidation'=>true,
 			'clientOptions'=>array(
 				'validateOnSubmit'=>true,
@@ -33,12 +33,10 @@ $this->breadcrumbs=array(
 				  echo ' | ';
 			?>
 			<?php echo CHtml::link('Register?',array('//user/create'));?>
-
 			</p>
-			
-			</br>
+			<p>
 			<?php echo $form->checkBoxRow($model,'rememberMe'); ?>
-			</br>
+			</p>
 		
 			<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit','type'=>'primary', 'label'=>'Login')); ?>
 			
