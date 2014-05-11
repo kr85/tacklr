@@ -9,7 +9,7 @@
  * @property integer $boardID
  * @property integer $isPrivate
  * @property string $tackName
- * @property string $tackContent
+ * @property string $tackURL
  * @property string $imageURL
  * @property string $tackDescription
  * @property string $updateDate
@@ -73,9 +73,9 @@ class Tack extends CActiveRecord
                 "
                 <div class='row'>
                 ";
-                echo $form->labelEx($new_tack,'tackContent');
-                echo $form->textField($new_tack,'tackContent',array('size'=>60,'maxlength'=>255)); 
-                echo $form->error($new_tack,'tackContent');
+                echo $form->labelEx($new_tack,'tackURL');
+                echo $form->textField($new_tack,'tackURL',array('size'=>60,'maxlength'=>255)); 
+                echo $form->error($new_tack,'tackURL');
                 echo 
                 "
                 </div>
@@ -168,9 +168,9 @@ class Tack extends CActiveRecord
                 "
                 <div class='row'>
                 ";
-                echo $form->labelEx($new_tack,'tackContent');
-                echo $form->textField($new_tack,'tackContent',array('size'=>60,'maxlength'=>255)); 
-                echo $form->error($new_tack,'tackContent');
+                echo $form->labelEx($new_tack,'tackURL');
+                echo $form->textField($new_tack,'tackURL',array('size'=>60,'maxlength'=>255)); 
+                echo $form->error($new_tack,'tackURL');
                 echo 
                 "
                 </div>
@@ -231,17 +231,17 @@ class Tack extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tackName, tackContent, tackDescription', 'required'),
-			array('boardID, isPrivate', 'numerical', 'integerOnly'=>true),
+			array('tackName, tackURL, tackDescription', 'required'),
+			array('boardID, isPrivate, top, left', 'numerical', 'integerOnly'=>true),
 			array('userID', 'numerical'),
-            array('tackContent', 'length', 'max'=>255),
+            array('tackURL', 'length', 'max'=>255),
             array('tackType', 'length', 'max'=>255),
 			//array('createDate, updateDate', 'default',),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-            array('tackID, userID, boardID, isPrivate, tackName, tackContent, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
-            //array('tackID, userID, boardID, isPrivate, tackName, tackContent, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'insert'),
-            //array('tackID, userID, boardID, isPrivate, tackName, tackContent, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'update'),
+            array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'search'),
+            //array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'insert'),
+            array('tackID, userID, boardID, isPrivate, tackName, tackURL, tackImage, tackDescription, updateDate, createDate', 'safe', 'on'=>'update'),
 		);
 	}
 
@@ -270,12 +270,14 @@ class Tack extends CActiveRecord
 			'boardID' => 'Board',
 			'isPrivate' => 'Private',
 			'tackName' => 'Tack Name',
-            'tackContent' => 'Tack URL',
+            'tackURL' => 'Tack URL',
             'tackType' => 'Tack Type',
 			'tackImage' => 'Tack Image',
 			'tackDescription' => 'Tack Description',
 			'updateDate' => 'Update Date',
 			'createDate' => 'Create Date',
+            'top' => 'top',
+            'left' => 'left',
 		);
 	}
 
@@ -302,12 +304,14 @@ class Tack extends CActiveRecord
 		$criteria->compare('boardID',$this->boardID);
 		$criteria->compare('isPrivate',$this->isPrivate);
 		$criteria->compare('tackName',$this->tackName,true);
-        $criteria->compare('tackContent',$this->tackContent,true);
+        $criteria->compare('tackURL',$this->tackURL,true);
         $criteria->compare('tackType',$this->tackType,true);
 		$criteria->compare('tackImage',$this->tackImage,true);
 		$criteria->compare('tackDescription',$this->tackDescription,true);
 		$criteria->compare('updateDate',$this->updateDate,true);
-		$criteria->compare('createDate',$this->createDate,true);
+        $criteria->compare('createDate',$this->createDate,true);
+        $criteria->compare('top',$this->top,true);
+        $criteria->compare('left',$this->left,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -337,13 +341,24 @@ class Tack extends CActiveRecord
     }
     public function toHtml($isOwner=false,$index=false)
     {
-        $pre = "<li class='user_tack pull-left pull-up' id='".$this->tackID."'>\n";// style=' position:relative;'>\n";
-        
-        $pre .= "\t<div class='tack_title' id='".$this->tackName."'>\n<p>";
+        $pre = "<li class='user_tack pull-left pull-up' id='".$this->tackID."'";
+        if(!$index && ( ((int)$this->top != 0) && ((int)$this->left != 0)))
+        {
+            $pre .= " style= position:absolute;". $this->getPostionsAsHtml($index);
+        }
 
+        $pre .= ">\n\t<div class='tack_title' id='".$this->tackName."'>\n<p>";
+        
         if($isOwner)
         {
-            $pre .= "<span>" . CHtml::link('X',array('tack/delete', 'id'=>$this->tackID)) . "</span>";
+            $pre .= "<span>" . CHtml::link('X',array('tack/delete', 'id'=>$this->tackID))."   " ;
+            $pre .= CHtml::ajaxSubmitButton('Update Position',Yii::app()->createUrl('/tack/updatePosition'),
+                    array(
+                        'type'=>'POST',
+                        'data'=> 'js:{"id":'.$this->tackID.',"x":String($(\'#'.$this->tackID.'\').position().left), "y":String($(\'#'.$this->tackID.'\').position().top)}',                        
+                        //'success'=>'js:function(string){ alert(string); }',   
+                        //'error' =>'js:function(string) {alert(string);}'        
+                    ),array('class'=>'button',)). "</span>";
         }
         if($index)
         {
@@ -367,6 +382,17 @@ class Tack extends CActiveRecord
 
         return array('preContent'=>$pre, 'content'=>$this->get_widget(), 'postContent'=>$post);
 
+    }
+
+    public function getPostionsAsHtml($index=false)
+    {
+        $html = "";
+        if($index)
+        {
+            return $html;
+        }
+        $html .= (is_null($this->top) ? "" : "top:".$this->top."px;"). (is_null($this->left) ? "" : "left:".$this->left."px;");
+        return $html;
     }
 
     public function getTackDescriptionAsHtml()
@@ -397,7 +423,7 @@ class Tack extends CActiveRecord
     public function getFeedbackField($index=false)
     {
 
-        $result = '<div class="form"><form action="/mytacks/tacklr/tack/update">
+        $result = '<div class="form"><form action="/mytacks/tacklr/tack/updateFeedback">
             <div>
                 <textarea rows="3" name="comment" class="feedback_form" placeholder="Comment then press \'enter\'" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></textarea>
             </div> 
@@ -421,23 +447,24 @@ class Tack extends CActiveRecord
         // @todo: make all of these return widgets...
         if($this->tackType == 'ext.Yiitube')
         {
-            return array('widget_type'=>$this->tackType, 'widget_properties'=>array('v'=>$this->tackContent, 'size'=>'small'));
+            return array('widget_type'=>$this->tackType, 'widget_properties'=>array('v'=>$this->tackURL, 'size'=>'small'));
         }
         else if($this->tackType == 'sc-widget')
         {
-            return '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url='.$this->tackContent.'" width="100%" scrolling="no" frameborder="no"></iframe>';
+            return '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url='.$this->tackURL.'" width="100%" scrolling="no" frameborder="no"></iframe>';
 
         }
         else if ($this->tackType == 'image')
         {
-            return '<a href='.$this->tackContent.'><img class="tack_content" src='.$this->tackContent.' /></a>';
+            return '<a href='.$this->tackURL.'><img class="tack_content" src='.$this->tackURL.' /></a>';
         }
         else if ($this->tackType == 'url')
         {
-            return '<div class="tack_content" align="center"><a href='.$this->tackContent.'>'.$this->tackName.'</a></div>';
+            return '<div class="tack_content" align="center"><a href='.$this->tackURL.'>'.$this->tackName.'</a></div>';
         }
         else
         {
+            $html = '<p><div class="tack_content" align="center">'.$this->tackURL.'</div></p>';
             return $html;
         }
     }
