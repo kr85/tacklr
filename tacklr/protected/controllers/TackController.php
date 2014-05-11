@@ -18,7 +18,7 @@ class TackController extends Controller
 
         $boardID = $_POST['Tack']['boardID'];
 
-        $tack_type = $this->deduceTackType($_POST['Tack']['tackURL']);
+        $tack_type = $this->deduceTackType($_POST['Tack']['tackContent']);
         $model = new Tack($tack_type);
 
         if(isset($_POST['Tack']))
