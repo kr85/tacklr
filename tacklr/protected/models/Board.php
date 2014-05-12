@@ -42,7 +42,7 @@ class Board extends CActiveRecord
             <div class='form'> ";
             $form=$caller->beginWidget('CActiveForm', array(
                     'id'=>'board-form',
-                    'action'=>'/mytacks/tacklr/board/create/',
+                    'action'=>'/mytacks/tacklr/board/create',
                     'method'=>'post',
                     // Please note: When you enable ajax validation, make sure the corresponding
                     // controller action is handling ajax validation correctly.

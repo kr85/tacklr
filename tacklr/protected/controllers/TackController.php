@@ -108,6 +108,17 @@ class TackController extends Controller
             $this->redirect($this->createUrl('/board/view/',array('id'=>$_GET['boardid'])));
     }
 
+    public function actionDeleteFeedback($id,$boardid)
+    {
+        $feedback = Feedback::model()->deleteByPk($id);
+        if($feedback)
+        {
+            echo "yes";
+        }
+
+        $this->redirect($this->createUrl('/board/view/',array('id'=>$boardid)));
+    }
+
     public function actionUpdatePosition()
     {
         //var_dump($_POST);

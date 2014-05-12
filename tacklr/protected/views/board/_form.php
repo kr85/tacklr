@@ -26,16 +26,16 @@ div.form {
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 )); ?>
-<div align="center" id="modalForm">
+<div align="center" id="modalForm" >
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($model); ?>
-
-	<div class="row">
+	
+	<div class="row" align="center">
 		<?php echo $form->labelEx($model,'boardTitle'); ?>
 		<?php echo $form->textField($model,'boardTitle',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'boardTitle'); ?>
-	</div>
+	
 
 		<?php echo $form->labelEx($model,'categoryID'); ?>
         <?php
@@ -45,11 +45,9 @@ div.form {
             $list = CHtml::listData($models, 'categoryID', 'categoryName');
             echo $form->dropDownList($model, 'categoryID', $list, array('empty' => 'Choose a category')); ?>
 		<?php echo $form->error($model,'categoryID'); ?></br>
-    <div class="row buttons">
+   
         <a href="/mytacks/tacklr/category/create"><button type="button">Create New Category</button></a>
-    </div>
-
-	<div class="row">
+   
 		<?php echo $form->labelEx($model,'description'); ?>
 		<?php echo $form->textArea($model,'description',array('rows'=>3, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'description'); ?>
@@ -58,7 +56,7 @@ div.form {
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>
-
+	
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->

@@ -30,9 +30,10 @@ $cs->registerCssFile($baseUrl.'/css/user_tack.css');
  ?>
 <div class = "thumbnail_frame" style="width:90% margin-left:30px align:center" >
         <ul class="thumbnails" style="width:90% margin-left:30px opacity:0.6">
-            <?php foreach ($tacks as $tack): ?>
+            <?php $count=0; foreach ($tacks as $tack): ?>
                 <!--<li class="span4">    -->
-                            <?php
+                			<?php
+                            
                             if(!is_null($tack->boardID) && $tack->get_type() != 'text')
                             {
                             	$tackHtml = $tack->toHtml($isOwner,true);
@@ -48,6 +49,11 @@ $cs->registerCssFile($baseUrl.'/css/user_tack.css');
                                 }
                                 echo $tackHtml['postContent'];
                                 $tack->getFeedbackField($this, Yii::app()->user);
+                                $count++;
+                                if($count > 10)
+                                {
+                                	break;
+                                }
                             }
                             ?>
                 <!--</li>-->

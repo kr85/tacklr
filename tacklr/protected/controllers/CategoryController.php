@@ -81,7 +81,7 @@ class CategoryController extends Controller
             $model->createDate = $timeStamp;
 
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->categoryID));
+				$this->redirect(array('board/create','id'=>$model->categoryID));
 		}
 
 		$this->render('create',array(
