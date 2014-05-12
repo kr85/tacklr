@@ -21,9 +21,6 @@
 
 <div class="tacks_container" id="page" style="width:100%">
 
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
 
 	
 

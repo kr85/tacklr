@@ -15,6 +15,7 @@ div.tacks_container {
 	color: grey;
     border: 2px solid darkblue;
     position: fixed;
+    top:10%;
     left: 50%;
     margin-top: 10px; /*set to a negative number 1/2 of your height*/
     margin-left: -15em;
@@ -23,8 +24,34 @@ div.tacks_container {
     background-color: rgb(255, 255, 136);
     -webkit-box-shadow: 5px 5px 5px rgba(33,33,33,.7);
     padding: auto;
+    position: -webkit-sticky;
+    position:    -moz-sticky;
+    position:     -ms-sticky;
+    position:      -o-sticky;
+    position:         sticky;
     min-width: 250px;
     max-height: 200px
+}
+
+.form_tack {
+    color: grey;
+    border: 2px solid darkblue;
+    position: fixed;
+    display: table-cell;
+    /*background: -webkit-linear-gradient(rgb(240, 240, 10),rgb(255, 255, 136));*/
+    background-color: rgb(255, 255, 136);
+    -webkit-box-shadow: 5px 5px 5px rgba(33,33,33,.7);
+    margin-top: 15px;
+    padding: auto;
+    min-width: 350px;
+    max-height: 800px;
+    position: -webkit-sticky;
+    position:    -moz-sticky;
+    position:     -ms-sticky;
+    position:      -o-sticky;
+    position:         sticky;
+    top: 20%;
+    left:40%;
 }
 
 .user_tack {
@@ -44,7 +71,7 @@ div.tacks_container {
     position:     -ms-sticky;
     position:      -o-sticky;
     position:         sticky;
-    top: 180px;
+    top: 200px;
 }
 
 .tack_title {
