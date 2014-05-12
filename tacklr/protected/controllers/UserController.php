@@ -129,7 +129,7 @@ class UserController extends Controller
 	{
 		$model= User::model()->findByAttributes(array('username'=>$id));
 		$oldPassWord = $model->password;
-		$model=$this->loadModel($id);
+		//$model=$this->loadModel($id);
 		$pst = new DateTimeZone('America/Los_Angeles');
 		$date = new DateTime();
 		$date->setTimezone($pst);
